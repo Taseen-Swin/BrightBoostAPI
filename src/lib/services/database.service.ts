@@ -1,10 +1,11 @@
 import sql, { config, ConnectionPool, IResult, Request, Transaction } from 'mysql';
 
 import { Config } from '../models/config.model';
+import { AnyARecord } from 'dns';
 
 
 class DatabaseService {
-  
+
   sqlConfig!: config;
   databasePool!: ConnectionPool;
 
@@ -31,18 +32,38 @@ class DatabaseService {
       console.log('Database connected');
       this.databasePool = pool;
     });
-    
+
   }
 
-  getHealthStatus(): { is_healthy: boolean, is_connected: boolean} {
+  getHealthStatus(): { is_healthy: boolean, is_connected: boolean } {
     return {
       is_healthy: this.databasePool.healthy,
       is_connected: this.databasePool.connected
     }
   }
 
-  //====================================================Boolean Checks===============================================================
 
+  async login(email: string, password: string): Promise<boolean> {
+    const request = this.databasePool.request();
+    request.input('email', sql.VarChar, email);
+    request.input('password', sql.VarChar, password);
+    const res = await request.query(`SELECT CASE WHEN COUNT(id) >= 1 THEN 
+    CAST ( 1 as BIT )
+    ELSE
+    CAST ( 0 as BIT )
+    END AS userExist
+    FROM users
+    WHERE email = @email AND password = @password`);
+    return res.recordset?.[0]?.userExist;
+  }
+
+  fetchClasses(stduentID: string): Promise<any> {
+    const request = this.databasePool.request();
+    request.input('stduentID', sql.Int, stduentID);
+    const sqlQuery = `SELECT * from classes
+    WHERE stduentID = @stduentID`;
+    return request.query(sqlQuery);
+  }
 }
 
 export const databaseService = new DatabaseService();

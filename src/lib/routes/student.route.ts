@@ -12,8 +12,8 @@ export class StudentRoute {
     setupRoutes(app: Express): void {
         app.route('/student/login')
         .post(this.studuentController.login)
-        app.route('/student/classes')
-        .get(this.studuentController.login)
+        app.route('/student/:stduentID/classes')
+        .get(this.studuentController.classes)
         app.route('/student/class')
         .get(this.studuentController.login)
         app.route('/student/:classId/attendence')
@@ -27,8 +27,10 @@ export class StudentRoute {
         .get(this.studuentController.login)
         app.route('/student/enrolments')
         .get(this.studuentController.login)
-        app.route('/student/:studemtID/enrolements')
+        app.route('/student/:studentID/enrolements')
         .get(this.studuentController.login)
+        .post(this.studuentController.login)
+        app.route('/student/:studentID/feedback')
         .post(this.studuentController.login)
     }
 }
