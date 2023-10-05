@@ -12,4 +12,18 @@ CREATE TABLE Question ( id INT PRIMARY KEY AUTO_INCREMENT, content VARCHAR(200) 
 
 CREATE TABLE Answer ( id INT PRIMARY KEY AUTO_INCREMENT, content VARCHAR(200) NOT NULL, response_time DATETIME NOT NULL, tutor_id INT NOT NULL, question_id INT NOT NULL,  FOREIGN KEY (tutor_id) REFERENCES User(id), FOREIGN KEY (question_id) REFERENCES Question(id) );
 
- CREATE TABLE Survey ( id INT PRIMARY KEY AUTO_INCREMENT, student_id INT NOT NULL, course_id INT NOT NULL, rating INT NOT NULL CHECK (rating BETWEEN 1 AND 5), feedback VARCHAR(200) NOT NULL, FOREIGN KEY (student_id) REFERENCES User(id), FOREIGN KEY (course_id) REFERENCES Course(id) );
+CREATE TABLE Survey ( id INT PRIMARY KEY AUTO_INCREMENT, student_id INT NOT NULL, course_id INT NOT NULL, rating INT NOT NULL CHECK (rating BETWEEN 1 AND 5), feedback VARCHAR(200) NOT NULL, FOREIGN KEY (student_id) REFERENCES User(id), FOREIGN KEY (course_id) REFERENCES Course(id) );
+
+INSERT INTO User (name, email, password, type)
+VALUES ('Taseen','taseen@gmail.com','qwerty', 'admin');
+
+
+INSERT INTO User (name, email, password, type)
+VALUES ('Pat','pat@gmail.com','qwerty', 'tutor');
+
+INSERT INTO User (name, email, password, type)
+VALUES ('ryan','ryan@gmail.com','qwerty', 'tutor');
+
+INSERT INTO User (name, email, password, type)
+VALUES ('Dev','dev@gmail.com','qwerty', 'student');
+
