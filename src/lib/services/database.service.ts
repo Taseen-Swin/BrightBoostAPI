@@ -52,7 +52,7 @@ class DatabaseService {
     ELSE
     CAST ( 0 as BIT )
     END AS userExist
-    FROM users
+    FROM User
     WHERE email = @email AND password = @password`);
     return res.recordset?.[0]?.userExist;
   }
