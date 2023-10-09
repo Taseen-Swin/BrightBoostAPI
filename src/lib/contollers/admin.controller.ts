@@ -1,18 +1,14 @@
-import { IResult } from 'mysql';
-import { databaseService } from '../services/database.service';
 import { Request, Response } from 'express';
+import { databaseService } from '../services/database.service';
 import { Config } from '../models/config.model';
 import { config } from '../config/config';
 
-
 export class AdminController {
-    config: Config ;
+    config: Config;
+
     constructor() {
-        this.config= config
-
+        this.config = config;
     }
-
-    //================================================Getters==========================================================================
 
     async login(req: Request, res: Response): Promise<void> {
         const { email, password } = req.body;
@@ -23,11 +19,23 @@ export class AdminController {
             } else {
                 res.status(400).json({ message: 'Login unsuccessfully!' });
             }
-        } catch (error) {
+        } catch (error: any) {
             res.status(500).json({ message: error.message });
         }
     }
 
-
-
+    async classes(req: Request, res: Response): Promise<void> {
+        const { studentID } = req.params;
+        try {
+            const queryResult = await databaseService.fetchClasses(studentID);
+            if (queryResult.length) { 
+                let result = queryResult[0]; 
+                res.status(200).json({ data: result });
+            } else {
+                res.status(400).json({ message: 'No Data' });
+            }
+        } catch (error: any) {
+            res.status(500).json({ message: error.message });
+        }
+    }
 }

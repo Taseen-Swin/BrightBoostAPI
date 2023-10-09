@@ -1,18 +1,14 @@
-import { IResult } from 'mysql';
-import { databaseService } from '../services/database.service';
 import { Request, Response } from 'express';
+import { databaseService } from '../services/database.service';
 import { Config } from '../models/config.model';
 import { config } from '../config/config';
 
-
 export class StudentController {
     config: Config;
+
     constructor() {
-        this.config = config
-
+        this.config = config;
     }
-
-    //================================================Getters==========================================================================
 
     async login(req: Request, res: Response): Promise<void> {
         const { email, password } = req.body;
@@ -23,26 +19,23 @@ export class StudentController {
             } else {
                 res.status(400).json({ message: 'Login unsuccessfully!' });
             }
-        } catch (error) {
+        } catch (error: any) {
             res.status(500).json({ message: error.message });
         }
     }
 
     async classes(req: Request, res: Response): Promise<void> {
-        const { studuentID } = req.params;
+        const { studentID } = req.params;
         try {
-            const queryResult = await databaseService.fetchClasses(studuentID);
-            if (queryResult.recordset.length) {
-                let result = queryResult.recordset[0];
+            const queryResult = await databaseService.fetchClasses(studentID);
+            if (queryResult.length) { 
+                let result = queryResult[0]; 
                 res.status(200).json({ data: result });
+            } else {
+                res.status(400).json({ message: 'No Data' });
             }
-            res.status(400).json({ message: 'No Data' });
-        } catch (error) {
+        } catch (error: any) {
             res.status(500).json({ message: error.message });
         }
     }
-
-
-
-
 }
