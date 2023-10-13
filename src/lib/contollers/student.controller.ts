@@ -13,13 +13,27 @@ export class StudentController {
     async login(req: Request, res: Response): Promise<void> {
         const { email, password } = req.body;
         try {
-            const userExists = await databaseService.login(email, password);
-            if (userExists) {
-                res.status(200).json({ message: 'Login successfully!' });
+            const user = await databaseService.login(email, password);
+            if (user.length) {
+                res.status(200).json({ message: 'Login successfully!', user: user });
             } else {
                 res.status(400).json({ message: 'Login unsuccessfully!' });
             }
-        } catch (error : any) {
+        } catch (error: any) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+
+    async signup(req: Request, res: Response): Promise<void> {
+        const { email, name, password } = req.body;
+        try {
+            const userID = await databaseService.insertUser(email, name, password, 'Student');
+            if (userID) {
+                res.status(200).json({ message: 'successfully!', UserID: userID });
+            } else {
+                res.status(400).json({ message: 'unsuccessfully!' });
+            }
+        } catch (error: any) {
             res.status(500).json({ message: error.message });
         }
     }
@@ -34,7 +48,7 @@ export class StudentController {
             } else {
                 res.status(400).json({ message: 'No Data' });
             }
-        } catch (error : any) {
+        } catch (error: any) {
             res.status(500).json({ message: error.message });
         }
     }
@@ -49,7 +63,7 @@ export class StudentController {
             } else {
                 res.status(400).json({ message: 'No Data' });
             }
-        } catch (error : any) {
+        } catch (error: any) {
             res.status(500).json({ message: error.message });
         }
     }
@@ -63,7 +77,7 @@ export class StudentController {
             } else {
                 res.status(400).json({ message: 'Unsuccessfully!' });
             }
-        } catch (error : any) {
+        } catch (error: any) {
             res.status(500).json({ message: error.message });
         }
     }
@@ -77,7 +91,7 @@ export class StudentController {
             } else {
                 res.status(400).json({ message: 'Unsuccessfully!' });
             }
-        } catch (error : any) {
+        } catch (error: any) {
             res.status(500).json({ message: error.message });
         }
     }
@@ -91,7 +105,7 @@ export class StudentController {
             } else {
                 res.status(400).json({ message: 'Unsuccessfully!' });
             }
-        } catch (error : any) {
+        } catch (error: any) {
             res.status(500).json({ message: error.message });
         }
     }
@@ -105,20 +119,20 @@ export class StudentController {
             } else {
                 res.status(400).json({ message: 'No Data' });
             }
-        } catch (error : any) {
+        } catch (error: any) {
             res.status(500).json({ message: error.message });
         }
     }
 
     async courses(req: Request, res: Response): Promise<void> {
         try {
-            const queryResult = await databaseService.courses();
+            const queryResult = await databaseService.fetchCourses();
             if (queryResult.length) {
                 res.status(200).json({ data: queryResult });
             } else {
                 res.status(400).json({ message: 'No Data' });
             }
-        } catch (error : any) {
+        } catch (error: any) {
             res.status(500).json({ message: error.message });
         }
     }
@@ -126,27 +140,27 @@ export class StudentController {
     async enrollments(req: Request, res: Response): Promise<void> {
         const { studentID } = req.params;
         try {
-            const queryResult = await databaseService.enrollments(studentID);
+            const queryResult = await databaseService.fetchStudentEnrolments(parseInt(studentID));
             if (queryResult.length) {
                 res.status(200).json({ data: queryResult });
             } else {
                 res.status(400).json({ message: 'No Data' });
             }
-        } catch (error : any) {
+        } catch (error: any) {
             res.status(500).json({ message: error.message });
         }
     }
 
     async enroll(req: Request, res: Response): Promise<void> {
-        const { studentID } = req.params;
+        const { studentID, courseID } = req.params;
         try {
-            const queryResult = await databaseService.enroll();
+            const queryResult = await databaseService.insertStudentEnrolments(parseInt(studentID), parseInt(courseID));
             if (queryResult) {
                 res.status(200).json({ message: 'Successfully!' });
             } else {
                 res.status(400).json({ message: 'Unsuccessfully!' });
             }
-        } catch (error : any) {
+        } catch (error: any) {
             res.status(500).json({ message: error.message });
         }
     }

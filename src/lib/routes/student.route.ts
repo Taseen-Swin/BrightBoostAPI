@@ -12,6 +12,8 @@ export class StudentRoute {
     setupRoutes(app: Express): void {
         app.route('/student/login')
         .post(this.studuentController.login)
+        app.route('/student/signup')
+        .post(this.studuentController.signup)
         app.route('/student/:studentID/classes')
         .get(this.studuentController.classes)
         app.route('/student/class')
