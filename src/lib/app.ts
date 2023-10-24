@@ -7,6 +7,8 @@ import { databaseService } from './services/database.service';
 import { Config } from './models/config.model';
 
 import { StudentRoute } from './routes/student.route';
+import { AdminRoute } from './routes/admin.route';
+import { TutorRoute } from './routes/tutor.route';
 
 
 
@@ -35,6 +37,8 @@ export class ExpressServer {
 
     setupRoutes(): void {
         new StudentRoute(this.app);
+        new TutorRoute(this.app);
+        new AdminRoute(this.app)
     }
 
 

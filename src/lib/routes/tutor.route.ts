@@ -10,15 +10,15 @@ export class TutorRoute {
     }
 
     setupRoutes(app: Express): void {
-        app.route('/student/login')
+        app.route('/tutor/login')
         .post(this.tutorController.login)
-        app.route('/student/classes')
+        app.route('/tutor/classes')
         .get(this.tutorController.login)
-        app.route('/student/class')
+        app.route('/tutor/class')
         .get(this.tutorController.login)
-        app.route('/student/:classId/attendence')
+        app.route('/tutor/:classId/attendence')
         .post(this.tutorController.login)
-        app.route('/student/:classId/attendence')
+        app.route('/tutor/:classId/attendence')
         .post(this.tutorController.login)
     }
 }

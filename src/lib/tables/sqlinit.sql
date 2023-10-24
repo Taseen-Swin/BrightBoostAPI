@@ -6,13 +6,31 @@ CREATE TABLE User (
     type ENUM('student', 'admin', 'tutor') NOT NULL
 );
 
+
+
 CREATE TABLE Course (
     id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(50) NOT NULL,
     description VARCHAR(200) NOT NULL,
-    session_day VARCHAR(200)  NULL,
-    session_slot VARCHAR(200)  NULL,
+    session_day VARCHAR(200) NULL,
+    session_slot VARCHAR(200) NULL
 );
+
+CREATE TABLE Session (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    course_id INT NOT NULL,
+    session_date DATETIME NOT NULL,
+    FOREIGN KEY (course_id) REFERENCES Course(id)
+);
+
+CREATE TABLE Session_Tutor (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    session_id INT NOT NULL,
+    tutor_id INT NOT NULL,
+    FOREIGN KEY (session_id) REFERENCES Session(id),
+    FOREIGN KEY (tutor_id) REFERENCES User(id)
+);
+
 
 CREATE TABLE Tutor_Course (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -36,6 +54,7 @@ CREATE TABLE Attendance (
     session_id INT NOT NULL,
     status ENUM('present', 'absent', 'late') NOT NULL,
     FOREIGN KEY (student_id) REFERENCES User(id),
+    FOREIGN KEY (session_id) REFERENCES Session(id)
 );
 
 CREATE TABLE Question (
@@ -59,7 +78,7 @@ CREATE TABLE Answer (
     session_id INT,
     FOREIGN KEY (tutor_id) REFERENCES User(id),
     FOREIGN KEY (question_id) REFERENCES Question(id),
-    FOREIGN KEY (session_id) REFERENCES Session(id) 
+    FOREIGN KEY (session_id) REFERENCES Session(id)
 );
 
 CREATE TABLE Survey (
@@ -72,31 +91,15 @@ CREATE TABLE Survey (
     FOREIGN KEY (course_id) REFERENCES Course(id)
 );
 
-CREATE TABLE Session (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    course_id INT NOT NULL,
-    session_date DATETIME NOT NULL,
-    FOREIGN KEY (course_id) REFERENCES Course(id)
-);
-
-CREATE TABLE Session_Tutor (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    session_id INT NOT NULL,
-    tutor_id INT NOT NULL,
-    FOREIGN KEY (session_id) REFERENCES Session(id),
-    FOREIGN KEY (tutor_id) REFERENCES User(id)
-);
 
 INSERT INTO User (name, email, password, type)
 VALUES ('Taseen','taseen@gmail.com','qwerty', 'admin');
-
 
 INSERT INTO User (name, email, password, type)
 VALUES ('Pat','pat@gmail.com','qwerty', 'tutor');
 
 INSERT INTO User (name, email, password, type)
-VALUES ('ryan','ryan@gmail.com','qwerty', 'tutor');
+VALUES ('Ryan','ryan@gmail.com','qwerty', 'tutor');
 
 INSERT INTO User (name, email, password, type)
 VALUES ('Dev','dev@gmail.com','qwerty', 'student');
-

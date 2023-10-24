@@ -36,10 +36,10 @@ class DatabaseService {
     };
   }
 
-  async login(email: string, password: string): Promise<any> {
+  async login(email: string, password: string,type: string): Promise<any> {
     const [result]: any = await this.databasePool.query(
-      'SELECT id,email,type FROM User WHERE email = ? AND password = ?',
-      [email, password]
+      'SELECT id,email,type FROM User WHERE email = ? AND password = ? AND type =?',
+      [email, password,type]
     );
 
     return result;
@@ -127,12 +127,12 @@ class DatabaseService {
 
   //ADMIN QUERIES AS PER ADMIN ROUTES:::::::
   //admin login//
-  async Alogin(Aemail: string, Apassword: string): Promise<boolean> {
-    const [result] = await this.databasePool.query<ResultSetHeader>(
-      'SELECT * FROM User WHERE email = ? AND password = ?',
-      [Aemail, Apassword]
-    );
-  }
+  // async Alogin(Aemail: string, Apassword: string): Promise<boolean> {
+  //   const [result] = await this.databasePool.query<ResultSetHeader>(
+  //     'SELECT * FROM User WHERE email = ? AND password = ?',
+  //     [Aemail, Apassword]
+  //   );
+  // }
 
   // 2.Get Stats for Classes (/admin/classes/stats) GET Request:
   // 'SELECT COUNT(*) AS class_count FROM Classes';
