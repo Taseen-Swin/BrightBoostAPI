@@ -13,14 +13,14 @@ export class AdminController {
   async login(req: Request, res: Response): Promise<void> {
     const { email, password } = req.body;
     try {
-      const userExist = await databaseService.login(email, password,'admin');
-      if (userExist) {
-        res.status(200).json({ message: 'Login successfully!' });
-      } else {
-        res.status(400).json({ message: 'Login unsuccessfully!' });
-      }
+        const user = await databaseService.login(email, password,'admin');
+        if (user.length) {
+            res.status(200).json({ message: 'Login successfully!', user: user });
+        } else {
+            res.status(201).json({ message: 'Login unsuccessfully!' });
+        }
     } catch (error: any) {
-      res.status(500).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
   }
 

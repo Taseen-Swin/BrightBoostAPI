@@ -30,7 +30,7 @@ export class StudentRoute {
         // app.route('/student/:studentID/enrolements')
         // .get(this.studuentController.enrollments)
         // .post(this.studuentController.enroll)
-        app.route('/student/:studentID/feedback')
-        .post(this.studuentController.login)
+        // app.route('/student/:studentID/feedback')
+        // .post(this.studuentController.login)
     }
 }

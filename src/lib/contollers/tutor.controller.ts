@@ -11,14 +11,13 @@ export class TutorController {
     }
 
     async login(req: Request, res: Response): Promise<void> {
+        const { email, password } = req.body;
         try {
-            const { email, password } = req.body;
-            const type= 'tutor'
-            const userExists = await databaseService.login(email, password,type);
-            if (userExists) {
-                res.status(200).json({ message: 'Login successful!' });
+            const user = await databaseService.login(email, password,'tutor');
+            if (user.length) {
+                res.status(200).json({ message: 'Login successfully!', user: user });
             } else {
-                res.status(400).json({ message: 'Login unsuccessful!' });
+                res.status(201).json({ message: 'Login unsuccessfully!' });
             }
         } catch (error: any) {
             res.status(500).json({ message: error.message });
