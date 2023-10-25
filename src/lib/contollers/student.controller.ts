@@ -27,14 +27,14 @@ export class StudentController {
     async signup(req: Request, res: Response): Promise<void> {
         const { email, name, password } = req.body;
         try {
-            const userID = await databaseService.insertUser(email, name, password, 'Student');
+            const userID = await databaseService.insertUser(name, email, password, 'Student');
             if (userID) {
                 res.status(200).json({ message: 'successfully!', UserID: userID });
             } else {
-                res.status(400).json({ message: 'unsuccessfully!' });
+                res.status(201).json({ message: 'Un successfully!' });
             }
         } catch (error: any) {
-            res.status(500).json({ message: error.message });
+            res.status(201).json({ message:"User Already Exist" });
         }
     }
 
