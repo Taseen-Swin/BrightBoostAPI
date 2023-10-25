@@ -103,3 +103,45 @@ VALUES ('Ryan','ryan@gmail.com','qwerty', 'tutor');
 
 INSERT INTO User (name, email, password, type)
 VALUES ('Dev','dev@gmail.com','qwerty', 'student');
+
+INSERT INTO User (name, email, password, type)
+VALUES
+    ('Alice Johnson', 'alice@example.com', 'password123', 'student'),
+    ('Bob Smith', 'bob@example.com', 'securePass', 'student'),
+    ('Charlie Brown', 'charlie@example.com', '12345pass', 'admin'),
+    ('David Davis', 'david@example.com', 'userPass', 'tutor'),
+    ('Eve Williams', 'eve@example.com', 'test1234', 'student'),
+    ('Frank Wilson', 'frank@example.com', 'passWord321', 'student'),
+    ('Grace Lee', 'grace@example.com', 'secretPass', 'tutor'),
+    ('Hannah Harris', 'hannah@example.com', 'hannah123', 'student'),
+    ('Ivy Taylor', 'ivy@example.com', 'welcomePass', 'admin'),
+    ('Jack Robinson', 'jack@example.com', 'pass1234', 'student');
+
+INSERT INTO Course (name, description, session_day, session_slot)
+VALUES
+    ('Math 101', 'Introduction to Algebra', 'Monday', '10:00 AM - 11:30 AM'),
+    ('History 202', 'World History: The Modern Era', 'Wednesday', '2:00 PM - 3:30 PM'),
+    ('Computer Science 301', 'Advanced Data Structures', 'Tuesday', '1:00 PM - 2:30 PM'),
+    ('English 105', 'Creative Writing Workshop', 'Thursday', '3:00 PM - 4:30 PM'),
+    ('Physics 201', 'Classical Mechanics', 'Friday', '9:00 AM - 10:30 AM'),
+    ('Biology 110', 'Introduction to Biology', 'Monday', '1:30 PM - 3:00 PM'),
+    ('Chemistry 202', 'Organic Chemistry', 'Wednesday', '10:00 AM - 11:30 AM'),
+    ('Art 101', 'Fundamentals of Drawing', 'Tuesday', '3:30 PM - 5:00 PM'),
+    ('Music 202', 'Music Theory', 'Thursday', '10:30 AM - 12:00 PM'),
+    ('Psychology 301', 'Abnormal Psychology', 'Friday', '2:30 PM - 4:00 PM');
+
+INSERT INTO Tutor_Course (tutor_id, course_id)
+VALUES
+    (2, 1), -- Pat tutors Math 101
+    (2, 2), -- Pat tutors History 202
+    (3, 3), -- Ryan tutors Computer Science 301
+    (3, 4), -- Ryan tutors English 105
+    (19, 5), -- Charlie tutors Physics 201
+    (20, 6), -- David tutors Biology 110
+    (23, 7), -- Grace tutors Chemistry 202
+    (25, 8), -- Ivy tutors Art 101
+    (19, 9), -- Charlie tutors Music 202
+    (20, 10), -- David tutors Psychology 301
+    (2, 5), -- Pat tutors Physics 201
+    (3, 6), -- Ryan tutors Biology 110
+    (19, 8); -- Charlie tutors Art 101    

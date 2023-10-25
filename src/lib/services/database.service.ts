@@ -102,7 +102,10 @@ class DatabaseService {
 
   async fetchStudentEnrolments(userID: number): Promise<any | null> {
     const [result] = await this.databasePool.query<ResultSetHeader>(
-      'SELECT * FROM Enrollment e inner join Course c on e.course_id = c.id where e.student_id = ?',
+      `SELECT c.*, (e.student_id IS NOT NULL) AS enrol
+      FROM Course c
+      LEFT JOIN Enrollment e
+      ON c.id = e.course_id AND e.student_id = ?;`,
       [userID]
     );
     return result;
@@ -122,6 +125,8 @@ class DatabaseService {
     );
     return result;
   }
+
+  
 
   //-----------------------------------------------------------------------------------------------//
 
