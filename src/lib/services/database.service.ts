@@ -216,13 +216,6 @@ class DatabaseService {
     return result;
   }
 
-  async startSession(courseID: number): Promise<number | null> {
-    const [result] = await this.databasePool.query<ResultSetHeader>(
-      'INSERT INTO Session (course_id, session_date,isactive) VALUES (?, ?,?)',
-      [courseID, new Date(), 1]
-    );
-    return result.insertId;
-  }
 
   //-------------------------------------------Tutor---------------------------------------------------//
   async fetchTutorClasses(TutorID: string): Promise<any> {
@@ -243,6 +236,45 @@ class DatabaseService {
     WHERE tc.tutor_id = ? AND c.session_day = ?;
     `, [TutorID, dayOfWeek]);
     return rows;
+  }
+
+
+
+  async startSession(courseID: number): Promise<number | null> {
+    const [result] = await this.databasePool.query<ResultSetHeader>(
+      'INSERT INTO Session (course_id, session_date,isactive) VALUES (?, ?,?)',
+      [courseID, new Date(), 1]
+    );
+    return result.insertId;
+  }
+  async EndSession(sessionID: number): Promise<boolean> {
+    const [result] = await this.databasePool.query<ResultSetHeader>(
+      `UPDATE Session
+      SET isactive = 0
+      WHERE id = ?`,
+      [sessionID]
+    );
+    return  result.affectedRows > 0; 
+  }
+
+  async tutorQuestion(session_id: number): Promise<any | null> {
+    const [result] = await this.databasePool.query<ResultSetHeader>(
+      `select q.id, q.content as question
+      from Question q
+      left join Answer a
+      on q.id=a.question_id 
+      where q.session_id =?  and a.id is null`,
+      [session_id]
+    );
+    return result;
+  }
+
+  async submitAnswer(answer: string, tutorID: string, questionID: string, sessionID: string): Promise<number | null> {
+    const [result] = await this.databasePool.query<ResultSetHeader>(
+      'INSERT INTO Answer (content, response_time,tutor_id,question_id,session_id) VALUES (?, ?,?,?,?)',
+      [answer, new Date(), tutorID, questionID, sessionID]
+    );
+    return result.insertId;
   }
 
 
