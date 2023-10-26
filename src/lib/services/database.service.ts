@@ -53,11 +53,16 @@ class DatabaseService {
     const today = new Date();
     const dayOfWeek = daysOfWeek[today.getDay()];
     const [rows] = await this.databasePool.query(`
-    SELECT c.*, s.id as session_id, IFNULL(s.isactive, 0) as isActive
+    SELECT c.*, s_latest.id as session_id, IFNULL(s_latest.isactive, 0) as isActive
     FROM Course c
     INNER JOIN Enrollment e ON c.id = e.course_id
-    LEFT JOIN Session s ON c.id = s.course_id
+    LEFT JOIN Session  s_latest ON s_latest.id = (
+      SELECT MAX(s.id)
+      FROM Session s
+      WHERE s.course_id = c.id
+  )
     WHERE e.student_id = ? AND c.session_day = ?
+    
     `, [studentID, dayOfWeek]);
     return rows;
   }
@@ -211,7 +216,36 @@ class DatabaseService {
     return result;
   }
 
-  //-----------------------------------------------------------------------------------------------//
+  async startSession(courseID: number): Promise<number | null> {
+    const [result] = await this.databasePool.query<ResultSetHeader>(
+      'INSERT INTO Session (course_id, session_date,isactive) VALUES (?, ?,?)',
+      [courseID, new Date(), 1]
+    );
+    return result.insertId;
+  }
+
+  //-------------------------------------------Tutor---------------------------------------------------//
+  async fetchTutorClasses(TutorID: string): Promise<any> {
+
+    const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+    const today = new Date();
+    const dayOfWeek = daysOfWeek[today.getDay()];
+    const [rows] = await this.databasePool.query(`
+    SELECT c.*, s_latest.id AS session_id, IFNULL(s_latest.isactive, 0) AS isActive
+    FROM Course c
+    INNER JOIN Tutor_Course tc ON c.id = tc.course_id
+    LEFT JOIN Session s_latest ON s_latest.id = (
+        SELECT MAX(s.id)
+        FROM Session s
+        WHERE s.course_id = c.id
+    )
+    WHERE tc.tutor_id = ? AND c.session_day = ?;
+    `, [TutorID, dayOfWeek]);
+    return rows;
+  }
+
+
 
   //ADMIN QUERIES AS PER ADMIN ROUTES:::::::
   //admin login//

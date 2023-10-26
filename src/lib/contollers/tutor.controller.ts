@@ -13,7 +13,7 @@ export class TutorController {
     async login(req: Request, res: Response): Promise<void> {
         const { email, password } = req.body;
         try {
-            const user = await databaseService.login(email, password,'tutor');
+            const user = await databaseService.login(email, password, 'tutor');
             if (user.length) {
                 res.status(200).json({ message: 'Login successfully!', user: user });
             } else {
@@ -24,34 +24,34 @@ export class TutorController {
         }
     }
 
-    // async classes(req: Request, res: Response): Promise<void> {
-    //     try {
-    //         const { tutorID } = req.params;
-    //         const queryResult = await databaseService.fetchClasses(tutorID);
-    //         if (queryResult.length) {
-    //             const result = queryResult[0];
-    //             res.status(200).json({ data: result });
-    //         } else {
-    //             res.status(400).json({ message: 'No Data' });
-    //         }
-    //     } catch (error: any) {
-    //         res.status(500).json({ message: error.message });
-    //     }
-    // }
+    async classes(req: Request, res: Response): Promise<void> {
+        try {
+            const { tutorID } = req.params;
+            const queryResult = await databaseService.fetchTutorClasses(tutorID);
+            if (queryResult.length) {
+                const result = queryResult;
+                res.status(200).json({ data: result });
+            } else {
+                res.status(400).json({ message: 'No Data' });
+            }
+        } catch (error: any) {
+            res.status(500).json({ message: error.message });
+        }
+    }
 
-    // async startSession(req: Request, res: Response): Promise<void> {
-    //     try {
-    //         const { courseID, tutorID } = req.params;
-    //         const queryResult = await databaseService.startSession(courseID, tutorID);
-    //         if (queryResult) {
-    //             res.status(200).json({ message: 'Session started successfully!' });
-    //         } else {
-    //             res.status(400).json({ message: 'Session start unsuccessful!' });
-    //         }
-    //     } catch (error: any) {
-    //         res.status(500).json({ message: error.message });
-    //     }
-    // }
+    async startSession(req: Request, res: Response): Promise<void> {
+        try {
+            const { courseID } = req.body;
+            const queryResult = await databaseService.startSession( courseID);
+            if (queryResult) {
+                res.status(200).json({ message: 'Session started successfully!' });
+            } else {
+                res.status(400).json({ message: 'Session start unsuccessful!' });
+            }
+        } catch (error: any) {
+            res.status(500).json({ message: error.message });
+        }
+    }
 
     // async class(req: Request, res: Response): Promise<void> {
     //     try {
