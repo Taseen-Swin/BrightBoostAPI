@@ -143,8 +143,8 @@ class DatabaseService {
   }
   async insertStudentEnrolments(userID: number, CourseID: number): Promise<number | null> {
     const [result] = await this.databasePool.query<ResultSetHeader>(
-      'INSERT INTO Enrollment (student_id, course_id) VALUES (?, ?)',
-      [userID, CourseID]
+      'INSERT INTO Enrollment (student_id, course_id,created_at) VALUES (?, ?,?)',
+      [userID, CourseID,new Date()]
     );
     return result.insertId;
   }
@@ -368,6 +368,79 @@ class DatabaseService {
     return result;
   }
 
+  async studentSessionAttend(): Promise<any | null> {
+    const [result] = await this.databasePool.query<ResultSetHeader>(
+      `
+      SELECT
+      S.id AS session_id,
+      CONCAT(c.name, ' - Session ', S.id) AS course_session,
+      COUNT(A.student_id) AS student_count
+  FROM
+      Session S
+  LEFT JOIN
+      Attendance A ON S.id = A.session_id
+  INNER JOIN
+      Course c ON c.id = S.course_id
+  GROUP BY
+      S.id, c.name;
+  
+      `
+    );
+    return result;
+  }
+
+  async QuestionAnswerEachSession(): Promise<any | null> {
+    const [result] = await this.databasePool.query<ResultSetHeader>(
+      `
+      SELECT
+      s.id AS session_id,
+      CONCAT(c.name, ' - Session ', s.id) AS course_session,
+      COUNT(q.id) AS questions_count,
+      count(a.id) as answer_count
+  FROM
+      Session s
+  JOIN
+      Course c ON s.course_id = c.id
+  LEFT JOIN
+      Question q ON s.id = q.session_id
+  LEFT JOIN
+      Answer a ON q.id = a.question_id    
+  GROUP BY
+      s.id, c.name
+  ORDER BY
+      s.id, c.name;
+  
+  
+      `
+    );
+    return result;
+  }
+
+  async QuestionAnswerEachCoursePercenatge(): Promise<any | null> {
+    const [result] = await this.databasePool.query<ResultSetHeader>(
+      `
+      SELECT
+      C.name AS course_name,
+      COUNT(DISTINCT Q.id) AS total_questions,
+      COUNT(DISTINCT A.id) AS answered_questions,
+      (COUNT(DISTINCT A.id) / COUNT(DISTINCT Q.id)) * 100 AS qna_percentage
+  FROM
+      Course C
+  LEFT JOIN
+      Session S ON C.id = S.course_id
+  LEFT JOIN
+      Question Q ON S.id = Q.session_id
+  LEFT JOIN
+      Answer A ON Q.id = A.question_id
+  GROUP BY
+      C.id, C.name
+  ORDER BY
+      qna_percentage DESC;
+  
+      `
+    );
+    return result;
+  }
   //admin login//
   // async Alogin(Aemail: string, Apassword: string): Promise<boolean> {
   //   const [result] = await this.databasePool.query<ResultSetHeader>(

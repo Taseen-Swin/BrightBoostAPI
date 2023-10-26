@@ -67,18 +67,43 @@ export class AdminController {
     }
   }
 
-  // async classesQnADetails(req: Request, res: Response): Promise<void> {
-  //   try {
-  //     const queryResult = await databaseService.classesQnADetails();
-  //     if (queryResult.length) {
-  //       res.status(200).json({ data: queryResult[0] });
-  //     } else {
-  //       res.status(400).json({ message: 'No Data' });
-  //     }
-  //   } catch (error: any) {
-  //     res.status(500).json({ message: error.message });
-  //   }
-  // }
+  async studentSessionAttend(req: Request, res: Response): Promise<void> {
+    try {
+      const queryResult = await databaseService.studentSessionAttend();
+      if (queryResult.length) {
+        res.status(200).json({ data: queryResult });
+      } else {
+        res.status(400).json({ message: 'No Data' });
+      }
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+
+  async QuestionAnswerEachSession(req: Request, res: Response): Promise<void> {
+    try {
+      const queryResult = await databaseService.QuestionAnswerEachSession();
+      if (queryResult.length) {
+        res.status(200).json({ data: queryResult });
+      } else {
+        res.status(400).json({ message: 'No Data' });
+      }
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+  async QuestionAnswerEachCoursePercenatge(req: Request, res: Response): Promise<void> {
+    try {
+      const queryResult = await databaseService.QuestionAnswerEachCoursePercenatge();
+      if (queryResult.length) {
+        res.status(200).json({ data: queryResult });
+      } else {
+        res.status(400).json({ message: 'No Data' });
+      }
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  }
 
   // async sessionQnADetails(req: Request, res: Response): Promise<void> {
   //   const { sessionID } = req.params;
