@@ -24,7 +24,7 @@ export class StudentRoute {
         app.route('/student/QnA/:sessionID')
         .post(this.studuentController.postQuestion)
         .get(this.studuentController.answerList)
-        app.route('/timetable/:userID')
+        app.route('/student/timetable/:userID')
         .get(this.studuentController.timetable)
         // app.route('/student/courses')
         // .get(this.studuentController.courses)

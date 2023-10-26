@@ -254,7 +254,7 @@ class DatabaseService {
       WHERE id = ?`,
       [sessionID]
     );
-    return  result.affectedRows > 0; 
+    return result.affectedRows > 0;
   }
 
   async tutorQuestion(session_id: number): Promise<any | null> {
@@ -290,6 +290,84 @@ class DatabaseService {
 
 
   //ADMIN QUERIES AS PER ADMIN ROUTES:::::::
+
+  async courseStat(): Promise<any | null> {
+    const [result] = await this.databasePool.query<ResultSetHeader>(
+      `SELECT
+      C.id AS course_id,
+      C.name AS course_name,
+      COUNT(DISTINCT E.student_id) as student_enrolled,
+      (SELECT COUNT(*) FROM User WHERE type = 'student') as total_student,
+       COUNT(DISTINCT A.student_id) as course_attendence,
+       (SELECT COUNT(*) FROM Enrollment WHERE course_id = C.id) as course_enrolments,
+      (COUNT(DISTINCT E.student_id) / (SELECT COUNT(*) FROM User WHERE type = 'student')) * 100 AS enrollment_percentage,
+      ifnull((COUNT(DISTINCT A.student_id) / (SELECT COUNT(*) FROM Enrollment WHERE course_id = C.id)) * 100,0.00) AS attendance_percentage
+      FROM
+          Course AS C
+      LEFT JOIN Enrollment AS E ON C.id = E.course_id
+      LEFT JOIN Session AS S ON C.id = S.course_id
+      LEFT JOIN Attendance AS A ON S.id = A.session_id
+      GROUP BY
+          C.id
+      ORDER BY
+          C.id;
+      `
+    );
+    return result;
+  }
+
+  async courseAttendeAvgStat(): Promise<any | null> {
+    const [result] = await this.databasePool.query<ResultSetHeader>(
+      `
+      Select course_name , avg(attendance_percentage)  as avg_course_att_perc from
+      (SELECT
+          U.name AS student_name,
+          C.name AS course_name,
+          IFNULL(
+              (COUNT(A.id) / (SELECT COUNT(DISTINCT S.id) FROM Session S WHERE S.course_id = C.id)) * 100,
+              0
+          ) AS attendance_percentage
+      FROM
+          User U
+      JOIN
+          Enrollment E ON U.id = E.student_id
+      JOIN
+          Course C ON E.course_id = C.id
+      LEFT JOIN
+          Attendance A ON U.id = A.student_id
+      LEFT JOIN
+          Session S ON A.session_id = S.id
+      GROUP BY
+          U.id, C.id
+      ORDER BY
+          U.name, C.name) as att_prt 
+          group by course_name
+      
+      `
+    );
+    return result;
+  }
+
+  async tutorQnAStats(): Promise<any | null> {
+    const [result] = await this.databasePool.query<ResultSetHeader>(
+      `
+      select u.id,u.name,count( distinct q.id) as QuestionAsked ,count( distinct a.id) as TutorResponded , AVG(TIMESTAMPDIFF(second, q2.submit_time, a.response_time)) AS average_response_time  from User u
+      inner join Tutor_Course ts
+      on u.id =  ts.tutor_id
+      inner join Session s
+      on s.course_id= ts.course_id
+      inner join Question q
+      on q.session_id= s.id
+      left join Answer a
+      on a.tutor_id =u.id
+      left join Question q2
+      on q2.id =a.question_id
+      group by u.name,u.id
+      `
+    );
+    return result;
+  }
+
   //admin login//
   // async Alogin(Aemail: string, Apassword: string): Promise<boolean> {
   //   const [result] = await this.databasePool.query<ResultSetHeader>(

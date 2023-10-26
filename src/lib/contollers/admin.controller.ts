@@ -13,42 +13,59 @@ export class AdminController {
   async login(req: Request, res: Response): Promise<void> {
     const { email, password } = req.body;
     try {
-        const user = await databaseService.login(email, password,'admin');
-        if (user.length) {
-            res.status(200).json({ message: 'Login successfully!', user: user });
-        } else {
-            res.status(201).json({ message: 'Login unsuccessfully!' });
-        }
+      const user = await databaseService.login(email, password, 'admin');
+      if (user.length) {
+        res.status(200).json({ message: 'Login successfully!', user: user });
+      } else {
+        res.status(201).json({ message: 'Login unsuccessfully!' });
+      }
     } catch (error: any) {
-        res.status(500).json({ message: error.message });
+      res.status(500).json({ message: error.message });
     }
   }
 
-  // async classesStats(req: Request, res: Response): Promise<void> {
-  //   try {
-  //     const queryResult = await databaseService.classesStats();
-  //     if (queryResult.length) {
-  //       res.status(200).json({ data: queryResult[0] });
-  //     } else {
-  //       res.status(400).json({ message: 'No Data' });
-  //     }
-  //   } catch (error: any) {
-  //     res.status(500).json({ message: error.message });
-  //   }
-  // }
+  async coursesStats(req: Request, res: Response): Promise<void> {
+    try {
+      const queryResult = await databaseService.courseStat();
+      const queryResult2 = await databaseService.courseAttendeAvgStat();
+      console.log(queryResult)
+      console.log(queryResult2)
+      const map = new Map();
+      queryResult2.forEach((item: any) => {
+        map.set(item.course_name, item);
+      });
 
-  // async tutorQnAStats(req: Request, res: Response): Promise<void> {
-  //   try {
-  //     const queryResult = await databaseService.tutorQnAStats();
-  //     if (queryResult.length) {
-  //       res.status(200).json({ data: queryResult[0] });
-  //     } else {
-  //       res.status(400).json({ message: 'No Data' });
-  //     }
-  //   } catch (error: any) {
-  //     res.status(500).json({ message: error.message });
-  //   }
-  // }
+      // Combine the arrays and calculate the average attendance percentage
+      const combinedArray = queryResult.map((item: any) => ({
+        ...item,
+        avg_course_att_perc: map.has(item.course_name)
+          ? map.get(item.course_name).avg_course_att_perc
+          : '0.0000', // Default to 0 if not found in array2
+      }));
+
+
+      if (queryResult.length) {
+        res.status(200).json({ data: combinedArray });
+      } else {
+        res.status(400).json({ message: 'No Data' });
+      }
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+
+  async tutorQnAStats(req: Request, res: Response): Promise<void> {
+    try {
+      const queryResult = await databaseService.tutorQnAStats();
+      if (queryResult.length) {
+        res.status(200).json({ data: queryResult });
+      } else {
+        res.status(400).json({ message: 'No Data' });
+      }
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  }
 
   // async classesQnADetails(req: Request, res: Response): Promise<void> {
   //   try {
