@@ -145,6 +145,20 @@ export class AdminController {
     }
   }
 
+  async QnADetails(req: Request, res: Response): Promise<void> {
+    
+    try {
+      const queryResult = await databaseService.QnADetails();
+      if (queryResult.length) {
+        res.status(200).json({ data: queryResult });
+      } else {
+        res.status(400).json({ message: 'No Data' });
+      }
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+
   // async addTimetable(req: Request, res: Response): Promise<void> {
   //   const { courseID, day, slot } = req.body;
   //   try {

@@ -468,6 +468,37 @@ class DatabaseService {
     );
     return result;
   }
+
+  async QnADetails(): Promise<any | null> {
+    const [result] = await this.databasePool.query<ResultSetHeader>(
+      `select 
+      u.id as tutor_id ,
+      u.name as tutor_name,
+      c.name as course,
+      q.content as question,
+      a.content as answer,
+      u2.name as ask_by,
+      TIMESTAMPDIFF(second, q.submit_time, a.response_time) as response_time,
+      s.id as session_id
+      from
+      User u
+      inner join 
+      Answer a
+      on u.id =a.tutor_id
+      inner join 
+      Question q
+      on q.id = a.question_id
+      inner join 
+      User u2
+      on u2.id =q.student_id
+      inner join Session s
+      on s.id= q.session_id
+      inner join Course c
+      on c.id =s.course_id`
+    );
+    return result;
+  }
+
   //admin login//
   // async Alogin(Aemail: string, Apassword: string): Promise<boolean> {
   //   const [result] = await this.databasePool.query<ResultSetHeader>(
