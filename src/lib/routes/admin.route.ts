@@ -22,6 +22,8 @@ export class AdminRoute {
         .get(this.adminController.QuestionAnswerEachSession)
         app.route('/admin/QuestionAnswerEachCoursePercenatge/stats')
         .get(this.adminController.QuestionAnswerEachCoursePercenatge)
+        app.route('/admin/enrolemetOverTime/stats')
+        .get(this.adminController.enrolemetOverTime)
         // app.route('/admin/classe/:classID/QnAs')
         // .get(this.adminController.sessionQnADetails)
         // app.route('/admin/:classId/attendence')

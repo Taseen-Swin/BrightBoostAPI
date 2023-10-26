@@ -441,6 +441,27 @@ class DatabaseService {
     );
     return result;
   }
+
+
+  async enrolmetOverTime(): Promise<any | null> {
+    const [result] = await this.databasePool.query<ResultSetHeader>(
+      `
+      SELECT
+      DATE_FORMAT(created_at, '%Y-%m') AS enrollment_month,
+      COUNT(id) AS enrollment_count
+  FROM
+      Enrollment
+  GROUP BY
+      enrollment_month
+  ORDER BY
+      enrollment_month;
+  
+  
+      `
+    );
+    return result;
+  }
+
   //admin login//
   // async Alogin(Aemail: string, Apassword: string): Promise<boolean> {
   //   const [result] = await this.databasePool.query<ResultSetHeader>(
