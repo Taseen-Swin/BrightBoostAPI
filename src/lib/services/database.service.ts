@@ -116,7 +116,7 @@ class DatabaseService {
   }
 
 
-  async getAttendance(studentID:string ,sessionID:string): Promise<any> {
+  async getAttendance(studentID: string, sessionID: string): Promise<any> {
     const [rows] = await this.databasePool.query(`
     SELECT s.*, c.name AS course_name, IFNULL(a.id, 0) as MarkStatus
     FROM Session s
@@ -125,11 +125,11 @@ class DatabaseService {
     INNER JOIN User u ON e.student_id = u.id
     left join Attendance a On a.session_id= s.id and u.id =a.student_id
     where u.id =? and s.id=?`,
-    [studentID,sessionID]);
+      [studentID, sessionID]);
     return rows;
   }
 
-  async markAttendance(studentID:number ,sessionID:number): Promise<number | null> {
+  async markAttendance(studentID: number, sessionID: number): Promise<number | null> {
     const [result] = await this.databasePool.query<ResultSetHeader>(
       'INSERT INTO Attendance (student_id, session_id) VALUES (?, ?)',
       [studentID, sessionID]
@@ -183,7 +183,33 @@ class DatabaseService {
     return result;
   }
 
+  async postQuestion(sessionID: number, studentID: number, Question: string): Promise<number | null> {
+    const [result] = await this.databasePool.query<ResultSetHeader>(
+      'INSERT INTO Question (content, submit_time,student_id,session_id) VALUES (?, ?,?,?)',
+      [Question, new Date(), studentID, sessionID]
+    );
+    return result.insertId;
+  }
 
+  async answerList(sessionID: number): Promise<any | null> {
+    const [result] = await this.databasePool.query<ResultSetHeader>(
+      `SELECT
+      q.content AS question,
+      IFNULL(a.content, 'No answer yet') AS answer,
+      IFNULL(u.name, 'No answer yet') AS answerBy,
+      IF(a.id IS NOT NULL, 'done', 'pending') AS answerstatus
+  FROM
+      Question q
+  LEFT JOIN
+      Answer a ON q.id = a.question_id
+  LEFT JOIN
+      User u ON u.id = a.tutor_id
+  WHERE
+      q.session_id = ?;`,
+      [sessionID]
+    );
+    return result;
+  }
 
   //-----------------------------------------------------------------------------------------------//
 

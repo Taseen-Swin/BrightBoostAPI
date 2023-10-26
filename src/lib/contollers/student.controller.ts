@@ -91,9 +91,9 @@ export class StudentController {
         }
     }
     async markAttendance(req: Request, res: Response): Promise<void> {
-        const { studentID, sessionID} = req.params;
+        const { studentID, sessionID } = req.params;
         try {
-            const result = await databaseService.markAttendance(parseInt(studentID),parseInt( sessionID));
+            const result = await databaseService.markAttendance(parseInt(studentID), parseInt(sessionID));
             if (result) {
                 res.status(200).json({ message: 'Successfully!' });
             } else {
@@ -104,33 +104,34 @@ export class StudentController {
         }
     }
 
-    // async postQuestion(req: Request, res: Response): Promise<void> {
-    //     const { SessionID, studentID } = req.body;
-    //     try {
-    //         const result = await databaseService.postQuestion(SessionID, studentID);
-    //         if (result) {
-    //             res.status(200).json({ message: 'Successfully!' });
-    //         } else {
-    //             res.status(201).json({ message: 'Unsuccessfully!' });
-    //         }
-    //     } catch (error: any) {
-    //         res.status(500).json({ message: error.message });
-    //     }
-    // }
+    async postQuestion(req: Request, res: Response): Promise<void> {
+        const { question, studentID } = req.body;
+        const { sessionID } = req.params;
+        try {
+            const result = await databaseService.postQuestion(parseInt(sessionID), studentID, question);
+            if (result) {
+                res.status(200).json({ message: 'Successfully!' });
+            } else {
+                res.status(201).json({ message: 'Unsuccessfully!' });
+            }
+        } catch (error: any) {
+            res.status(500).json({ message: error.message });
+        }
+    }
 
-    // async answerList(req: Request, res: Response): Promise<void> {
-    //     const { SessionID, studentID } = req.body;
-    //     try {
-    //         const result = await databaseService.answerList(SessionID, studentID);
-    //         if (result) {
-    //             res.status(200).json({ message: 'Successfully!' });
-    //         } else {
-    //             res.status(201).json({ message: 'Unsuccessfully!' });
-    //         }
-    //     } catch (error: any) {
-    //         res.status(500).json({ message: error.message });
-    //     }
-    // }
+    async answerList(req: Request, res: Response): Promise<void> {
+        const { sessionID } = req.params;
+        try {
+            const result = await databaseService.answerList(parseInt(sessionID));
+            if (result) {
+                res.status(200).json({ data: result });
+            } else {
+                res.status(201).json({ message: 'Unsuccessfully!' });
+            }
+        } catch (error: any) {
+            res.status(500).json({ message: error.message });
+        }
+    }
 
     async timetable(req: Request, res: Response): Promise<void> {
         const { userID } = req.params;
