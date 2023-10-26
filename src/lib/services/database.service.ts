@@ -277,6 +277,16 @@ class DatabaseService {
     return result.insertId;
   }
 
+  async Tutortimetable(userID: number): Promise<any | null> {
+    const [result] = await this.databasePool.query<ResultSetHeader>(
+      `SELECT c.* 
+      FROM Course c
+      inner JOIN Tutor_Course tc
+      ON c.id = tc.course_id AND tc.tutor_id = ?`,
+      [userID]
+    );
+    return result;
+  }
 
 
   //ADMIN QUERIES AS PER ADMIN ROUTES:::::::

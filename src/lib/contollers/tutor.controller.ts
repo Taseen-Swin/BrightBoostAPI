@@ -82,19 +82,19 @@ export class TutorController {
     //     }
     // }
 
-    // async timetable(req: Request, res: Response): Promise<void> {
-    //     try {
-    //         const { tutorID } = req.params;
-    //         const queryResult = await databaseService.timetable(tutorID);
-    //         if (queryResult.length) {
-    //             res.status(200).json({ data: queryResult });
-    //         } else {
-    //             res.status(201).json({ message: 'No Data' });
-    //         }
-    //     } catch (error: any) {
-    //         res.status(500).json({ message: error.message });
-    //     }
-    // }
+    async timetable(req: Request, res: Response): Promise<void> {
+        const { userID } = req.params;
+        try {
+            const queryResult = await databaseService.Tutortimetable(parseInt(userID));
+            if (queryResult.length) {
+                res.status(200).json({ data: queryResult });
+            } else {
+                res.status(201).json({ message: 'No Data' });
+            }
+        } catch (error: any) {
+            res.status(500).json({ message: error.message });
+        }
+    }
 
     async questions(req: Request, res: Response): Promise<void> {
         try {

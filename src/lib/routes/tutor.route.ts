@@ -23,7 +23,7 @@ export class TutorRoute {
         app.route('/tutor/:sessionID/QnA')
         .get(this.tutorController.questions)
         .post(this.tutorController.answer)
-        // app.route('/tutor/:tutorID/timetable')
-        // .get(this.tutorController.timetable)
+        app.route('/tutor/timetable/:userID')
+        .get(this.tutorController.timetable)
     }
 }
