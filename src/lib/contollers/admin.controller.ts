@@ -131,19 +131,19 @@ export class AdminController {
   //   }
   // }
 
-  // async timetable(req: Request, res: Response): Promise<void> {
-  //   const { studentID } = req.params;
-  //   try {
-  //     const queryResult = await databaseService.timetable(studentID);
-  //     if (queryResult.length) {
-  //       res.status(200).json({ data: queryResult });
-  //     } else {
-  //       res.status(400).json({ message: 'No Data' });
-  //     }
-  //   } catch (error: any) {
-  //     res.status(500).json({ message: error.message });
-  //   }
-  // }
+  async admintimetable(req: Request, res: Response): Promise<void> {
+    
+    try {
+      const queryResult = await databaseService.admintimetable();
+      if (queryResult.length) {
+        res.status(200).json({ data: queryResult });
+      } else {
+        res.status(400).json({ message: 'No Data' });
+      }
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  }
 
   // async addTimetable(req: Request, res: Response): Promise<void> {
   //   const { courseID, day, slot } = req.body;

@@ -462,6 +462,12 @@ class DatabaseService {
     return result;
   }
 
+  async admintimetable(): Promise<any | null> {
+    const [result] = await this.databasePool.query<ResultSetHeader>(
+      `select * from Course`
+    );
+    return result;
+  }
   //admin login//
   // async Alogin(Aemail: string, Apassword: string): Promise<boolean> {
   //   const [result] = await this.databasePool.query<ResultSetHeader>(

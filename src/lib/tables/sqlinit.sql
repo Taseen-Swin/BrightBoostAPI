@@ -307,12 +307,12 @@ VALUES
 INSERT INTO Answer (content, response_time, tutor_id, question_id, session_id)
 VALUES
     ('Chemical reactions involve the rearrangement of atoms.', '2023-10-31 12:00:00', 3, 1, 1),
-    ('Quantum entanglement is a phenomenon where particles become correlated.', '2023-11-01 14:30:00', 3, 2, 2),
-    ('To integrate, use the fundamental theorem of calculus.', '2023-11-02 13:30:00', 8, 3, 3),
-    ('Psychology explores behavior and mental processes.', '2023-11-03 15:30:00', 8, 4, 4),
-    ('Mixing oil paints requires a good understanding of color theory.', '2023-11-06 09:30:00', 8, 5, 8),
-    ('Genetics inheritance follows Mendelian laws.', '2023-11-07 13:45:00', 5, 6, 6),
-    ('Python is a versatile programming language for various applications.', '2023-11-08 10:30:00', 5, 7, 10),
-    ('Ancient civilizations include the Egyptians and Mesopotamians.', '2023-11-09 15:45:00', 5, 8, 12),
-    ('Shakespearean sonnets often explore themes of love and beauty.', '2023-11-10 10:45:00', 7, 9, 11),
-    ('Music theory covers scales, chords, and musical structure.', '2023-11-13 14:45:00', 7, 10, 2);
+    ('Quantum entanglement is a phenomenon where particles become correlated.', '2023-11-01 14:30:00', 5, 2, 2),
+    ('To integrate, use the fundamental theorem of calculus.', '2023-11-02 13:30:00', 7, 3, 3),
+    ('Psychology explores behavior and mental processes.', '2023-11-03 15:30:00', 13, 4, 4),
+    ('Mixing oil paints requires a good understanding of color theory.', '2023-11-06 09:30:00', 15, 5, 8),
+    ('Genetics inheritance follows Mendelian laws.', '2023-11-07 13:45:00', 17, 6, 6),
+    ('Python is a versatile programming language for various applications.', '2023-11-08 10:30:00', 15, 7, 10),
+    ('Ancient civilizations include the Egyptians and Mesopotamians.', '2023-11-09 15:45:00', 17, 8, 12),
+    ('Shakespearean sonnets often explore themes of love and beauty.', '2023-11-10 10:45:00', 13, 9, 11),
+    ('Music theory covers scales, chords, and musical structure.', '2023-11-13 14:45:00', 13, 10, 2);
