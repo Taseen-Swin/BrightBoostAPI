@@ -20,16 +20,17 @@ CREATE TABLE Session (
     id INT PRIMARY KEY AUTO_INCREMENT,
     course_id INT NOT NULL,
     session_date DATETIME NOT NULL,
+    isactive BIT DEFAULT 0,
     FOREIGN KEY (course_id) REFERENCES Course(id)
 );
 
-CREATE TABLE Session_Tutor (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    session_id INT NOT NULL,
-    tutor_id INT NOT NULL,
-    FOREIGN KEY (session_id) REFERENCES Session(id),
-    FOREIGN KEY (tutor_id) REFERENCES User(id)
-);
+-- CREATE TABLE Session_Tutor (
+--     id INT PRIMARY KEY AUTO_INCREMENT,
+--     session_id INT NOT NULL,
+--     tutor_id INT NOT NULL,
+--     FOREIGN KEY (session_id) REFERENCES Session(id),
+--     FOREIGN KEY (tutor_id) REFERENCES User(id)
+-- );
 
 
 CREATE TABLE Tutor_Course (
@@ -52,7 +53,6 @@ CREATE TABLE Attendance (
     id INT PRIMARY KEY AUTO_INCREMENT,
     student_id INT NOT NULL,
     session_id INT NOT NULL,
-    status ENUM('present', 'absent', 'late') NOT NULL,
     FOREIGN KEY (student_id) REFERENCES User(id),
     FOREIGN KEY (session_id) REFERENCES Session(id)
 );
@@ -62,10 +62,8 @@ CREATE TABLE Question (
     content VARCHAR(200) NOT NULL,
     submit_time DATETIME NOT NULL,
     student_id INT NOT NULL,
-    course_id INT NOT NULL,
     session_id INT,
     FOREIGN KEY (student_id) REFERENCES User(id),
-    FOREIGN KEY (course_id) REFERENCES Course(id),
     FOREIGN KEY (session_id) REFERENCES Session(id)
 );
 

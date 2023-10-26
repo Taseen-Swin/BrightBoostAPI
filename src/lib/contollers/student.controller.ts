@@ -38,49 +38,71 @@ export class StudentController {
         }
     }
 
-    // async classes(req: Request, res: Response): Promise<void> {
-    //     const { studentID } = req.params;
-    //     try {
-    //         const queryResult = await databaseService.fetchClasses(studentID);
-    //         if (queryResult.length) {
-    //             const result = queryResult[0];
-    //             res.status(200).json({ data: result });
-    //         } else {
-    //             res.status(201).json({ message: 'No Data' });
-    //         }
-    //     } catch (error: any) {
-    //         res.status(500).json({ message: error.message });
-    //     }
-    // }
+    async classes(req: Request, res: Response): Promise<void> {
+        const { studentID } = req.params;
+        try {
+            const queryResult = await databaseService.fetchClasses(studentID);
+            if (queryResult.length) {
+                const result = queryResult;
+                res.status(200).json({ data: result });
+            } else {
+                res.status(201).json({ message: 'No Data' });
+            }
+        } catch (error: any) {
+            res.status(500).json({ message: error.message });
+        }
+    }
 
-    // async class(req: Request, res: Response): Promise<void> {
-    //     const { SessionID } = req.params;
-    //     try {
-    //         const queryResult = await databaseService.fetchClass(SessionID);
-    //         if (queryResult.length) {
-    //             const result = queryResult[0];
-    //             res.status(200).json({ data: result });
-    //         } else {
-    //             res.status(201).json({ message: 'No Data' });
-    //         }
-    //     } catch (error: any) {
-    //         res.status(500).json({ message: error.message });
-    //     }
-    // }
+    async class(req: Request, res: Response): Promise<void> {
+        const { sessionID } = req.params;
+        try {
+            const queryResult = await databaseService.fetchClass(sessionID);
+            if (queryResult.length) {
+                const result = queryResult[0];
+                const formattedResult = {
+                    id: result.id,
+                    course_id: result.course_id,
+                    session_date: result.session_date,
+                    isactive: result.isactive,
+                    course_name: result.course_name,
+                    tutor_names: result.tutor_names.split(',').map((name: string) => name.trim()),
+                };
+                res.status(200).json({ data: formattedResult });
+            } else {
+                res.status(201).json({ message: 'No Data' });
+            }
+        } catch (error: any) {
+            res.status(500).json({ message: error.message });
+        }
+    }
 
-    // async markAttendance(req: Request, res: Response): Promise<void> {
-    //     const { SessionID, studentID } = req.body;
-    //     try {
-    //         const result = await databaseService.markAttendance(SessionID, studentID);
-    //         if (result) {
-    //             res.status(200).json({ message: 'Successfully!' });
-    //         } else {
-    //             res.status(201).json({ message: 'Unsuccessfully!' });
-    //         }
-    //     } catch (error: any) {
-    //         res.status(500).json({ message: error.message });
-    //     }
-    // }
+    async getAttendance(req: Request, res: Response): Promise<void> {
+        const { studentID, sessionID } = req.params;
+        try {
+            const queryResult = await databaseService.getAttendance(studentID, sessionID);
+            if (queryResult.length) {
+                const result = queryResult;
+                res.status(200).json({ data: result });
+            } else {
+                res.status(201).json({ message: 'No Data' });
+            }
+        } catch (error: any) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+    async markAttendance(req: Request, res: Response): Promise<void> {
+        const { studentID, sessionID} = req.params;
+        try {
+            const result = await databaseService.markAttendance(parseInt(studentID),parseInt( sessionID));
+            if (result) {
+                res.status(200).json({ message: 'Successfully!' });
+            } else {
+                res.status(201).json({ message: 'Unsuccessfully!' });
+            }
+        } catch (error: any) {
+            res.status(500).json({ message: error.message });
+        }
+    }
 
     // async postQuestion(req: Request, res: Response): Promise<void> {
     //     const { SessionID, studentID } = req.body;
@@ -110,19 +132,19 @@ export class StudentController {
     //     }
     // }
 
-    // async timetable(req: Request, res: Response): Promise<void> {
-    //     const { studentID } = req.params;
-    //     try {
-    //         const queryResult = await databaseService.timetable(studentID);
-    //         if (queryResult.length) {
-    //             res.status(200).json({ data: queryResult });
-    //         } else {
-    //             res.status(201).json({ message: 'No Data' });
-    //         }
-    //     } catch (error: any) {
-    //         res.status(500).json({ message: error.message });
-    //     }
-    // }
+    async timetable(req: Request, res: Response): Promise<void> {
+        const { userID } = req.params;
+        try {
+            const queryResult = await databaseService.timetable(parseInt(userID));
+            if (queryResult.length) {
+                res.status(200).json({ data: queryResult });
+            } else {
+                res.status(201).json({ message: 'No Data' });
+            }
+        } catch (error: any) {
+            res.status(500).json({ message: error.message });
+        }
+    }
 
     async courses(req: Request, res: Response): Promise<void> {
         const { studentID } = req.params;

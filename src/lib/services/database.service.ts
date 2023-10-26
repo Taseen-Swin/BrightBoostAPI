@@ -36,10 +36,10 @@ class DatabaseService {
     };
   }
 
-  async login(email: string, password: string,type: string): Promise<any> {
+  async login(email: string, password: string, type: string): Promise<any> {
     const [result]: any = await this.databasePool.query(
       'SELECT id,email,type FROM User WHERE email = ? AND password = ? AND type =?',
-      [email, password,type]
+      [email, password, type]
     );
 
     return result;
@@ -48,10 +48,33 @@ class DatabaseService {
 
   async fetchClasses(studentID: string): Promise<any> {
 
-    const [rows] = await this.databasePool.query('SELECT * FROM classes WHERE studentID = ?', [studentID]);
+    const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+    const today = new Date();
+    const dayOfWeek = daysOfWeek[today.getDay()];
+    const [rows] = await this.databasePool.query(`
+    SELECT c.*, s.id as session_id, IFNULL(s.isactive, 0) as isActive
+    FROM Course c
+    INNER JOIN Enrollment e ON c.id = e.course_id
+    LEFT JOIN Session s ON c.id = s.course_id
+    WHERE e.student_id = ? AND c.session_day = ?
+    `, [studentID, dayOfWeek]);
     return rows;
   }
 
+  async fetchClass(session_id: string): Promise<any | null> {
+    const [result] = await this.databasePool.query<ResultSetHeader>(
+      `SELECT s.*, c.name AS course_name, c.id, GROUP_CONCAT(u.name) AS tutor_names
+      FROM Session s
+      INNER JOIN Course c ON s.course_id = c.id
+      INNER JOIN Tutor_Course tc ON tc.course_id = c.id
+      INNER JOIN User u ON tc.tutor_id = u.id
+      WHERE s.id=?
+      GROUP BY s.id, c.id`,
+      [session_id]
+    );
+    return result;
+  }
   async insertStudent(name: string, age: number): Promise<number | null> {
     const [result] = await this.databasePool.query<ResultSetHeader>(
       'INSERT INTO Students (name, age) VALUES (?, ?)',
@@ -92,6 +115,27 @@ class DatabaseService {
     return rows;
   }
 
+
+  async getAttendance(studentID:string ,sessionID:string): Promise<any> {
+    const [rows] = await this.databasePool.query(`
+    SELECT s.*, c.name AS course_name, IFNULL(a.id, 0) as MarkStatus
+    FROM Session s
+    INNER JOIN Course c ON s.course_id = c.id
+    INNER JOIN Enrollment e ON e.course_id = c.id
+    INNER JOIN User u ON e.student_id = u.id
+    left join Attendance a On a.session_id= s.id and u.id =a.student_id
+    where u.id =? and s.id=?`,
+    [studentID,sessionID]);
+    return rows;
+  }
+
+  async markAttendance(studentID:number ,sessionID:number): Promise<number | null> {
+    const [result] = await this.databasePool.query<ResultSetHeader>(
+      'INSERT INTO Attendance (student_id, session_id) VALUES (?, ?)',
+      [studentID, sessionID]
+    );
+    return result.insertId;
+  }
   async insertStudentEnrolments(userID: number, CourseID: number): Promise<number | null> {
     const [result] = await this.databasePool.query<ResultSetHeader>(
       'INSERT INTO Enrollment (student_id, course_id) VALUES (?, ?)',
@@ -126,7 +170,20 @@ class DatabaseService {
     return result;
   }
 
-  
+
+
+  async timetable(userID: number): Promise<any | null> {
+    const [result] = await this.databasePool.query<ResultSetHeader>(
+      `SELECT c.* 
+      FROM Course c
+      inner JOIN Enrollment e
+      ON c.id = e.course_id AND e.student_id = ?`,
+      [userID]
+    );
+    return result;
+  }
+
+
 
   //-----------------------------------------------------------------------------------------------//
 
