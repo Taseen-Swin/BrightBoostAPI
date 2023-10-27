@@ -124,6 +124,9 @@ VALUES
     ('Jackson Turner', 'jackson@example.com', 'jacksonPass', 'student'),
     ('Scarlett Allen', 'scarlett@example.com', 'scarlettPass', 'student'),
     ('Carter Bennett', 'carter@example.com', 'carterPass', 'student'),
+    ('Syed M Taseen', 'taseen@gmail.com', 'qwerty', 'admin'),
+    ('Devnash', 'dev@gmail.com', 'qwerty', 'student'),
+    ('Pat', 'pat@gmail.com', 'qwerty', 'tutor'),
     ('Madison Parker', 'madison@example.com', 'madisonPass', 'student');
 
 
@@ -142,7 +145,7 @@ VALUES
     ('Computer Science 101', 'Introduction to Programming', 'Friday', '3:30 PM - 4:00 PM'),
     ('History 101', 'World History: Ancient Civilizations', 'Monday', '4:30 PM - 5:00 PM'),
     ('English 201', 'Shakespearean Literature', 'Wednesday', '3:30 PM - 5:00 PM'),
-    ('Cloud Architecture 401', 'Modern Designs', 'Friday', '3:30 PM - 5:00 PM'),
+    ('Cloud Architecture 401', 'Modern Designs', 'Monday', '3:30 PM - 5:00 PM'),
     ('Big Data 201', 'Data Analytics With Python', 'Monday', '4:30 PM - 5:00 PM'),
     ('Machine Learning 501', 'Machine Analytics', 'Tuesday', '3:30 PM - 5:00 PM');
 
@@ -157,7 +160,7 @@ VALUES
     (5, '2023-11-03 09:00:00', 0),
     (6, '2023-11-06 13:30:00', 0),
     (7, '2023-11-07 10:00:00', 0),
-    (8, '2023-11-08 15:30:00', 0),
+(8, '2023-11-08 15:30:00', 0),
     (9, '2023-11-09 10:30:00', 0),
     (10, '2023-11-10 14:30:00', 0),   
     (11, '2023-11-11 18:30:00', 0),    
@@ -185,6 +188,9 @@ VALUES
     (15, 11),
     (15, 3),
     (17, 9),
+    (32, 4),
+    (32, 8),
+    (32, 11),       
     (17, 1);
 
 -- Dummy data for the Enrollment table
@@ -268,16 +274,16 @@ VALUES
     (2, 2),
     (4, 4),
     (6, 6),
-    (8, 8),
+(8, 8),
     (10, 10),
     (10, 2),
     (10, 3),
     (11, 11),
     (12, 12),
     (14, 13),
-    (15, 12),
+(15, 12),
     (16, 11),
-    (17, 10),
+(17, 10),
     (18, 8),
     (21, 6),
     (22, 4),

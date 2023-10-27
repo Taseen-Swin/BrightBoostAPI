@@ -26,12 +26,8 @@ export class StudentRoute {
         .get(this.studuentController.answerList)
         app.route('/student/timetable/:userID')
         .get(this.studuentController.timetable)
-        // app.route('/student/courses')
-        // .get(this.studuentController.courses)
         app.route('/student/:studentID/enrolements')
         .get(this.studuentController.enrollments)
         .post(this.studuentController.enroll)
-        // app.route('/student/:studentID/feedback')
-        // .post(this.studuentController.login)
     }
 }

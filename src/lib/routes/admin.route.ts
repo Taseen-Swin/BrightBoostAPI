@@ -26,24 +26,9 @@ export class AdminRoute {
         .get(this.adminController.enrolemetOverTime)
         app.route('/admin/QnADetails')
         .get(this.adminController.QnADetails)
-        // app.route('/admin/classe/:classID/QnAs')
-        // .get(this.adminController.sessionQnADetails)
-        // app.route('/admin/:classId/attendence')
-        // .post(this.adminController.attendence)
-        // app.route('/admin/question')
-        // .post(this.adminController.question)
-        // .get(this.adminController.answers)
         app.route('/admin/timetable/:userID')
         .get(this.adminController.admintimetable)
-        // .post(this.adminController.addTimetable)
-        // .delete(this.adminController.deleteTimetable)
-        // .put(this.adminController.editTimetable)
-        // app.route('/admin/enrolments')
-        // .get(this.adminController.coursesWithStudentEnrolment)
-        // app.route('/admin/attendence')
-        // .get(this.adminController.coursesWithStudentAttendance)
-        // app.route('/admin/QnA')
-        // .get(this.adminController.coursesWithQnAStats)
+
 
     }
 }

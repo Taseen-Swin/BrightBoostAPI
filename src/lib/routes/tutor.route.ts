@@ -14,8 +14,6 @@ export class TutorRoute {
         .post(this.tutorController.login)
         app.route('/tutor/classes/:tutorID')
         .get(this.tutorController.classes)
-        // app.route('/tutor/class')
-        // .get(this.tutorController.class)
         app.route('/tutor/session')
         .post(this.tutorController.startSession)
         app.route('/tutor/session/end')

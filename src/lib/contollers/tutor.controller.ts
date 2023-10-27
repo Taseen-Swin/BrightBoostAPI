@@ -67,20 +67,6 @@ export class TutorController {
         }
     }
 
-    // async class(req: Request, res: Response): Promise<void> {
-    //     try {
-    //         const { SessionID } = req.params;
-    //         const queryResult = await databaseService.fetchClass(SessionID);
-    //         if (queryResult.length) {
-    //             const result = queryResult[0];
-    //             res.status(200).json({ data: result });
-    //         } else {
-    //             res.status(201).json({ message: 'No Data' });
-    //         }
-    //     } catch (error: any) {
-    //         res.status(500).json({ message: error.message });
-    //     }
-    // }
 
     async timetable(req: Request, res: Response): Promise<void> {
         const { userID } = req.params;
